@@ -1,0 +1,77 @@
+You are given N toys in a shop .
+The cost of each toy is represented by an array A[]. You are given Q queries, For ith query, You have a C amount of money which you can use to purchase the toys. Also there are K broken toys and you won't purchase them. The task is to calculate the maximum number of toys you can purchase using the C amount of money.
+
+Note: 1 based indexing is used. Each query is treated independently. 
+Query definition: The first element represents an integer C where C=Queries[i][0].
+The second element represents an integer K, where K = Queries[i][1].
+The next K integers represent the indices of broken toys which are Queries[i][j] ,j>1
+
+Example 1:
+
+Input:
+N = 5
+A[] = {8, 6, 9, 2, 5}
+Q = 2
+Query[][] = {{12,2,3,4},{30,0}}
+Output:
+2 5
+Explanation:
+Query 1: C = 12, K = 2 , 
+Indices of Broken toys is {3,4}
+Indices of Available toys are {1,2,5}
+If we purchase the toys 2 and 5 , 
+then cost = A[2]+A[5]= 6+5 = 11,
+Therefore,We purchase the 2 toys 
+using 11 amount of money.
+Query 2: C = 30, K = 0
+There is no broken toy. 
+We can purchase all toys,
+cost = A[1]+A[2]+A[3]+A[4]+A[5]= 30
+Therefore,We purchase the 5 toys
+using 30 amount of money.
+.
+
+
+
+
+
+
+
+
+
+
+
+def purchaseToys(N, A, Q, queries):
+    results = []
+    for query in queries:
+        C, K = query[0], query[1]
+        broken_toys = set(query[2:])
+        
+        available_toys = []
+        for i in range(1, N + 1):
+            if i not in broken_toys:
+                available_toys.append(A[i - 1])
+
+        available_toys.sort()
+        toys_purchased = 0
+        total_cost = 0
+
+        for cost in available_toys:
+            if total_cost + cost <= C:
+                total_cost += cost
+                toys_purchased += 1
+            else:
+                break
+
+        results.append(toys_purchased)
+
+    return results
+
+# Example usage:
+if __name__ == "__main__":
+    N = 5
+    A = [8, 6, 9, 2, 5]
+    Q = 2
+    queries = [[12, 2, 3, 4], [30, 0]]
+    results = purchaseToys(N, A, Q, queries)
+    print(results)  # Output: [2, 5]
